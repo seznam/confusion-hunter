@@ -1,0 +1,29 @@
+{
+    "language": "python",
+    "file_types": {
+        "dockerfile": {
+            "allow": [
+                "^[-a-zA-Z0-9_.]*Dockerfile[-a-zA-Z0-9_.]*$"
+            ],
+            "deny": []
+        },
+        "gitlab-ci": {
+            "allow": [
+                "^gitlab-ci.yml$"
+            ],
+            "deny": []
+        },
+        "script": {
+            "allow": [
+                "^[-a-zA-Z0-9_.]+\\.sh$"
+            ],
+            "deny": []
+        },
+        "markdown": {
+            "allow": [
+                "^[-a-zA-Z0-9_.]+\\.md$"
+            ],
+            "deny": []
+        }
+    }
+}

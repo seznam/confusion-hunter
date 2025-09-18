@@ -1,0 +1,35 @@
+{
+    "language": "javascript",
+    "file_types": {
+        "package_json": {
+            "allow": [
+                "^package.json$"
+            ],
+            "deny": []
+        },
+        "npmrc": {
+            "allow": [
+                ".npmrc"
+            ],
+            "deny": []
+        },
+        "dockerfile": {
+            "allow": [
+                "^[-a-zA-Z0-9_.]*Dockerfile[-a-zA-Z0-9_.]*$"
+            ],
+            "deny": []
+        },
+        "script": {
+            "allow": [
+                "^[-a-zA-Z0-9_.]+\\.sh$"
+            ],
+            "deny": []
+        },
+        "gitlab-ci": {
+            "allow": [
+                "^gitlab-ci.yml$"
+            ],
+            "deny": []
+        }
+    }
+}

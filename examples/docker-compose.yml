@@ -1,0 +1,85 @@
+# Docker Compose setup for running dependency confusion scanner
+# Usage: docker-compose up dependency-scanner
+
+version: '3.8'
+
+services:
+  dependency-scanner:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    volumes:
+      # Mount the project directory to scan
+      - ../:/workspace:ro
+      # Mount output directory for results
+      - ./scan-results:/output
+    working_dir: /workspace
+    command: >
+      confusion-hunter . 
+        --fail-on-found 
+        --output /output/dependency-scan.sarif 
+        --pretty
+    environment:
+      # Optional environment variables
+      - ENABLE_LOGGING=true
+      - TIMEOUT_SECS=30
+      - MAX_RETRIES=3
+    
+  # Alternative service for quiet scanning
+  dependency-scanner-quiet:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    volumes:
+      - ../:/workspace:ro
+      - ./scan-results:/output
+    working_dir: /workspace
+    command: >
+      confusion-hunter .
+        --fail-on-found
+        --quiet
+        --summary-only
+        --output /output/quiet-scan.sarif
+    environment:
+      - ENABLE_LOGGING=false
+    
+  # Service for JSON output
+  dependency-scanner-json:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    volumes:
+      - ../:/workspace:ro
+      - ./scan-results:/output
+    working_dir: /workspace
+    command: >
+      confusion-hunter .
+        --fail-on-found
+        --raw
+        --pretty
+        --output /output/scan-results.json
+    
+  # Service that runs continuously for monitoring
+  dependency-monitor:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    volumes:
+      - ../:/workspace:ro
+      - ./scan-results:/output
+    working_dir: /workspace
+    restart: unless-stopped
+    command: >
+      sh -c "
+        while true; do
+          echo 'Running dependency scan...'
+          confusion-hunter . 
+            --fail-on-found 
+            --quiet 
+            --summary-only 
+            --output /output/monitor-scan-$$(date +%Y%m%d-%H%M%S).sarif
+          sleep 3600  # Run every hour
+        done
+      "
+    environment:
+      - ENABLE_LOGGING=true

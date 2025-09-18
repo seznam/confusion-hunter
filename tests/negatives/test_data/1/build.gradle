@@ -1,0 +1,105 @@
+plugins {
+    id 'java-library'
+    id 'scala'
+    id 'maven-publish'
+    id 'com.github.maiflai.scalatest' version '0.31'
+}
+
+group 'com.example-company.project'
+version '0.5.2'
+
+repositories {
+    mavenLocal()
+    maven { url 'https://maven.internal.example.com/content/groups/repo' }
+}
+
+ext {
+    scalaBinaryVersion = "2.12"
+    scalaVersion = "2.12.10"
+    sparkVersion = "2.4.5"
+    circeVersion = "0.11.2"
+}
+
+dependencies {
+    api(
+            "com.softwaremill.sttp.client3:core_${scalaBinaryVersion}:3.3.14",
+            /**
+             * If you wish to update Hyper API:
+             *  1. place all JARs in `src/main/java` with suffix `-version`
+             *  2. place binary file in `src/main/resources` with suffix `-version`
+             *  3. edit LFS records to `.gitattributes`
+             *  4. update [[com.example-company.project.tableau.lib.ExternalLibrary.Version]]
+             *  5. delete files from previous version
+             *
+             * @see [https://www.tableau.com/support/releases/hyper-api/]
+             */
+            "net.java.dev.jna:jna:5.6.0",
+            fileTree(dir: 'src/main/java', include: '*.jar')
+    )
+
+    compileOnly(
+            "org.apache.spark:spark-core_${scalaBinaryVersion}:${sparkVersion}",
+            "org.apache.spark:spark-sql_${scalaBinaryVersion}:${sparkVersion}",
+    )
+
+    implementation(
+            "org.scala-lang:scala-library:${scalaVersion}",
+            "io.circe:circe-generic_${scalaBinaryVersion}:${circeVersion}",
+            "io.circe:circe-parser_${scalaBinaryVersion}:${circeVersion}"
+    )
+
+    testImplementation(
+            "org.apache.spark:spark-core_${scalaBinaryVersion}:${sparkVersion}",
+            "org.apache.spark:spark-sql_${scalaBinaryVersion}:${sparkVersion}",
+            "org.scalatest:scalatest_${scalaBinaryVersion}:3.0.9"
+    )
+}
+
+sourceSets {
+    main {
+        scala {
+            srcDirs = ['src/main/scala']
+        }
+    }
+}
+
+test {
+    reports.html.required = false
+}
+
+jar {
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.findAll { it.name.startsWith('tableauhyperapi') }.collect { zipTree(it) }
+    }
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allScala
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "https://maven.internal.example.com/content/repositories/${project.version.endsWith('-SNAPSHOT') ? 'snapshots' : 'releases'}-local"
+            credentials {
+                username System.env.MAVEN_REPO_USERNAME
+                password System.env.MAVEN_REPO_PASSWORD
+            }
+        }
+    }
+}
+
+task printVersion {
+    doLast {
+        println project.version
+    }
+}

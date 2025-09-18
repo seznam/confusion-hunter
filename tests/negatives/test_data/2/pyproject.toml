@@ -1,0 +1,28 @@
+[project]
+name = "encryption-server-1234"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "eventlet~=0.20",
+    "flask~=1.0",
+    "jinja2~=2.11",
+    "markupsafe~=2.0.1",
+    "python-json-logger~=2.0.0",
+    "requests~=2.12",
+    "numpy>=2.3",
+    "uwsgi<=2.0",
+    "uwsgi~=2.0",
+    "werkzeug~=0.11",
+]
+
+[project.optional-dependencies]
+test = [
+    "pylint>=3.3.4",
+    "pytest~=8.3.4",
+]
+
+[tool.uv]
+index-url = "https://pypi.repo.ops.example.com/simple"
+native-tls = true

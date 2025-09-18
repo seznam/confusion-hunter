@@ -1,0 +1,108 @@
+# GitLab CI pipeline for Dependency Confusion Scanner
+# Add this to your .gitlab-ci.yml file
+
+stages:
+  - security
+
+variables:
+  SCANNER_VERSION: "latest"  # or specify a version like "1.0.0"
+
+dependency_confusion_scan:
+  stage: security
+  image: python:3.11-slim
+  
+  before_script:
+    - pip install confusion-hunter
+    # Or install from source if in repository:
+    # - pip install .
+  
+  script:
+    - |
+      echo "Starting dependency confusion scan..."
+      confusion-hunter . \
+        --fail-on-found \
+        --output dependency-scan.sarif \
+        --pretty
+  
+  after_script:
+    - |
+      if [ $CI_JOB_STATUS = "failed" ]; then
+        echo "❌ Dependency confusion vulnerabilities detected!"
+        echo "Review the scan results and secure unclaimed packages."
+      else
+        echo "✅ No unclaimed dependencies found."
+      fi
+  
+  artifacts:
+    when: always
+    reports:
+      # GitLab can parse SARIF reports for security dashboard
+      sast: dependency-scan.sarif
+    paths:
+      - dependency-scan.sarif
+    expire_in: 30 days
+  
+  rules:
+    # Run on main branch and merge requests
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # Run on schedule (for daily checks)
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+
+# Alternative job for Docker-based scanning
+dependency_scan_docker:
+  stage: security
+  image: 
+    name: python:3.11-slim
+  
+  script:
+    - pip install confusion-hunter
+    - |
+      confusion-hunter . \
+        --fail-on-found \
+        --quiet \
+        --summary-only \
+        --raw \
+        --output scan-results.json
+  
+  artifacts:
+    when: always
+    paths:
+      - scan-results.json
+    expire_in: 7 days
+  
+  rules:
+    # Only run this variant on schedules
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      variables:
+        SCANNER_QUIET: "true"
+
+# Pipeline for container-based projects
+dependency_scan_container:
+  stage: security
+  image: docker:latest
+  services:
+    - docker:dind
+  
+  before_script:
+    - apk add --no-cache python3 py3-pip
+    - pip3 install confusion-hunter
+  
+  script:
+    - |
+      # Scan the current directory
+      confusion-hunter . \
+        --fail-on-found \
+        --output container-scan.sarif
+  
+  artifacts:
+    when: always
+    reports:
+      sast: container-scan.sarif
+    expire_in: 30 days
+  
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      exists:
+        - Dockerfile
+        - docker-compose.yml

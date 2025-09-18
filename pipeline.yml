@@ -1,0 +1,54 @@
+# Pipeline Configuration for Dependency Confusion Scanner
+# This file contains default configuration for CI/CD pipeline usage
+
+# Exit codes
+exit_codes:
+  success: 0          # No unclaimed packages found
+  failure: 1          # Unclaimed packages detected
+  error: 2            # Scanner error (invalid arguments, file not found, etc.)
+
+# Default pipeline settings
+defaults:
+  fail_on_found: true        # Fail pipeline if unclaimed packages are detected
+  quiet: false               # Show progress messages
+  summary_only: false        # Show detailed findings, not just summary
+  output_format: "sarif"     # Output format: "sarif" or "json"
+  pretty_print: false        # Compact output for faster processing
+
+# Severity levels that should fail the pipeline
+fail_on_severity:
+  - "warning"
+  - "error"
+
+# File patterns to exclude from scanning (optional)
+exclude_patterns:
+  - "*/test/*"
+  - "*/tests/*"
+  - "*/.git/*"
+  - "*/node_modules/*"
+  - "*/__pycache__/*"
+  - "*/venv/*"
+  - "*/.venv/*"
+
+# Timeout settings (in seconds)
+timeouts:
+  scan_timeout: 300          # Maximum time for entire scan
+  file_timeout: 30           # Maximum time per file
+  network_timeout: 10        # Network request timeout
+
+# Retry settings for network requests
+retry:
+  max_attempts: 3
+  backoff_factor: 2
+  
+# Registry settings
+registries:
+  pypi:
+    url: "https://pypi.org/pypi"
+    enabled: true
+  npm:
+    url: "https://registry.npmjs.org"
+    enabled: true
+  maven:
+    url: "https://repo1.maven.org/maven2"
+    enabled: false  # Disabled by default due to high false positive rate

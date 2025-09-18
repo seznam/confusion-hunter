@@ -1,0 +1,25 @@
+{
+  "name": "dependency-confusion-test",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Test package to trigger dependency confusion scanners with random package names.",
+  "dependencies": {
+    "test": "1.0.0",
+    "unclaimed-package-h1": "1.0.0",
+    "unclaimed-package-i1": "1.0.0",
+    "unclaimed-package-j1": "1.0.0"
+  },
+  "devDependencies": {
+    "unclaimed-package-k1": "^0.1.0",
+    "unclaimed-package-l1": "^0.1.0",
+    "unclaimed-package-m1": "^0.1.0",
+    "@testorg/unclaimed-package-n1": "^0.1.0",
+    "@testorg/unclaimed-package-o1": "^0.1.0"
+  },
+  "scripts": {
+    "test": "echo \"running nothing\""
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
+}

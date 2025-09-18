@@ -1,0 +1,87 @@
+# GitHub Actions workflow for Dependency Confusion Scanner
+# Place this file in .github/workflows/ directory
+
+name: Dependency Confusion Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  dependency-scan:
+    name: Scan for Unclaimed Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install Dependency Confusion Scanner
+      run: |
+        pip install confusion-hunter
+        # Or install from source:
+        # pip install .
+        
+    - name: Run dependency scan
+      run: |
+        confusion-hunter . \
+          --fail-on-found \
+          --output results.sarif \
+          --pretty
+          
+    - name: Upload SARIF results to GitHub Security
+      if: always()
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: results.sarif
+        category: dependency-confusion
+        
+    - name: Upload scan results as artifact
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: dependency-scan-results
+        path: results.sarif
+        retention-days: 30
+
+  # Alternative job for quiet pipeline execution
+  dependency-scan-quiet:
+    name: Silent Dependency Scan
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install scanner
+      run: pip install confusion-hunter
+        
+    - name: Run silent scan
+      run: |
+        confusion-hunter . \
+          --fail-on-found \
+          --quiet \
+          --summary-only \
+          --output results.sarif
+          
+    - name: Notify on failure
+      if: failure()
+      run: |
+        echo "::error::Unclaimed dependencies detected! Check the scan results."
+        echo "This indicates potential supply chain security risks."

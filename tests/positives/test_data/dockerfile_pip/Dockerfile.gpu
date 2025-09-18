@@ -1,0 +1,56 @@
+ARG UBUNTU_TAG=jammy
+ARG TENSORFLOW_VERSION=2.17.0-gpu
+
+FROM docker.ops.example.com/baseimage/ubuntu:${UBUNTU_TAG} AS ubuntu
+FROM docker.ops.example.com/upstream/tensorflow/tensorflow:${TENSORFLOW_VERSION} AS tf
+
+ARG PYPI=pypi.repo.ops.example.com
+
+ADD Dockerfile.gpu /Dockerfile
+
+COPY --from=ubuntu /etc/apt /etc/apt
+
+RUN mkdir -p ~/.pip \
+    && printf "[global]\nindex-url = https://%s/simple/\ncert = /etc/ssl/certs/ca-certificates.crt\nbreak-system-packages=true\n" ${PYPI} > ~/.pip/pip.conf
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates
+
+COPY        . /www/project/service/trainer-tf
+WORKDIR     /www/project/service/trainer-tf
+
+ENV         JOBSLIB_SETTINGS_MODULE="project_service_trainer_tf.settings"
+
+RUN set -e && dir=$(pwd) \
+    && xargs -r -a "$dir/debian-requirements.runtime.txt" apt-get install -y --no-install-recommends \
+    && pip3 install --timeout 60 "unclaimed-org-project-bootstrap" \
+    && pip3 install --timeout 60 -r requirements.txt \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN         adduser --quiet --system --group --shell /bin/bash unclaimed-org-project
+
+USER        unclaimed-org-project
+
+ENTRYPOINT  ["runjob", "project_service_trainer_tf.task.Task"]
+
+ARG         BUILD_DATE
+ARG         BUILD_HOSTNAME
+ARG         BUILD_JOB_NAME
+ARG         BUILD_NUMBER
+ARG         BUILD_TYPE
+ARG         VCS_REF
+ARG         VERSION
+
+LABEL       org.label-schema.schema-version="1.0.0" \
+    org.label-schema.vendor="example-company, a.s." \
+    org.label-schema.build-date="$BUILD_DATE" \
+    org.label-schema.build-type="$BUILD_TYPE" \
+    org.label-schema.build-ci-job-name="$BUILD_JOB_NAME" \
+    org.label-schema.build-ci-build-id="$BUILD_NUMBER" \
+    org.label-schema.build-ci-host-name="$BUILD_HOSTNAME" \
+    org.label-schema.version="$VERSION" \
+    org.label-schema.vcs-url="ssh://git@gitlab.example-company.net:team/project.git" \
+    org.label-schema.vcs-ref="$VCS_REF" \
+    org.label-schema.name="trainer-tf" \
+    org.label-schema.description="example-company Project trainer-tf docker container" \
+    org.label-schema.maintainer="team@example-company.com"

@@ -1,0 +1,23 @@
+[project]
+name = "generator-az-ai"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Dominique Broeglin", email = "dominique.broeglin@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "pexpect>=4.9.0",
+    "pytest-dependency>=0.6.0",
+    "pytest>=8.3.4",
+    "azure-identity>=1.19.0",
+    "azure-ai-inference>=1.0.0b6",
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra"
+testpaths = [
+    "tests",
+]

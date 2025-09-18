@@ -1,0 +1,93 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "confusion-hunter"
+version = "0.1.0"
+description = "Lightweight scanner for spotting unclaimed dependencies before attackers do - protects against supply-chain attacks"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Seznam Security Team", email = "security@firma.seznam.cz "},
+]
+maintainers = [
+    {name = "Seznam Security Team", email = "security@firma.seznam.cz "},
+]
+keywords = [
+    "security", 
+    "dependency-confusion", 
+    "supply-chain", 
+    "vulnerability-scanner", 
+    "dependencies", 
+    "pypi", 
+    "npm", 
+    "maven",
+    "sarif"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: System :: Systems Administration",
+    "Environment :: Console",
+]
+dependencies = [
+    "requests>=2.25.0",
+    "packaging>=21.0",
+    "aiohttp>=3.8.0",
+    "aiolimiter>=1.0.0",
+    "typing_extensions>=4.0.0",
+    "async_timeout>=4.0.0",
+    "tenacity>=8.0.0",
+    "bashlex>=0.16"
+]
+
+[project.urls]
+Homepage = "https://github.com/seznam/confusion-hunter"
+Documentation = "https://github.com/seznam/confusion-hunter#readme"
+
+[project.scripts]
+confusion-hunter = "confusion_hunter.scanner:main"
+hunter = "confusion_hunter.scanner:main"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "sarif_pydantic"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["confusion_hunter"]
+
+[tool.hatch.version]
+path = "confusion_hunter/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/confusion_hunter",
+    "/tests",
+    "/examples",
+    "/README.md",
+    "/LICENSE",
+]
+exclude = [
+    "/.git",
+    "/venv",
+    "/__pycache__",
+    "*.pyc",
+    "/temp",
+    "/package_analysis",
+    "/all_internal_packages",
+    "/scripts",
+] 

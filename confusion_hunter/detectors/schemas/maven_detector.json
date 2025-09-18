@@ -1,0 +1,18 @@
+{
+    "language": "java",
+    "file_types": {
+        "pomxml": {
+            "allow": [
+                "^[-a-zA-Z0-9_.]*pom[-a-zA-Z0-9_.]*.xml$"
+            ],
+            "deny": []
+        },
+        "buildgradle": {
+            "allow": [
+                "^[-a-zA-Z0-9_.]*build\\.gradle[-a-zA-Z0-9_.]*$",
+                "^[-a-zA-Z0-9_.]*build\\.gradle\\.kts[-a-zA-Z0-9_.]*$"
+            ],
+            "deny": []
+        }
+    }
+}

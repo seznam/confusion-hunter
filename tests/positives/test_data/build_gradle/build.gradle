@@ -1,0 +1,128 @@
+plugins {
+  id 'idea'
+  id 'scala'
+  id 'application'
+  id 'maven-publish'
+  id "com.github.johnrengelman.shadow" version "5.2.0"
+}
+
+group 'cz.example-company.iup'
+version '1.4.0'
+
+mainClassName = 'cz.example-company.iup.lalaggregator.App'
+
+repositories {
+  mavenLocal()
+  maven { url 'https://maven.internal.example.com/content/groups/repo' }
+}
+
+ext {
+  scalaVersion = '2.12'
+  scalaMinor = '18'
+
+  sparkVersion = "3.5.1"
+  hadoopVersion = "3.3.4"
+}
+
+dependencies {
+  implementation "org.scala-lang:scala-library:$scalaVersion.$scalaMinor"
+  implementation "com.typesafe.scala-logging:scala-logging_$scalaVersion:3.9.5"
+  implementation "org.scala-lang.modules:scala-java8-compat_$scalaVersion:1.0.2"
+  implementation 'com.typesafe:config:1.4.3'
+  implementation "com.github.scopt:scopt_${scalaVersion}:4.1.0"
+  implementation ("com.example-company.project:util:0.6.5-cdh5") {
+    exclude group: 'org.apache.hadoop'
+  }
+  implementation 'cz.example-company.iup:cmc-client:7.3.1'
+  implementation 'cz.example-company.iup:cmc-spark-connector:3.0.1'
+  implementation "com.lihaoyi:requests_$scalaVersion:0.8.2"
+  implementation "org.json4s:json4s-native_$scalaVersion:3.6.6"
+  implementation "cz.example-company.cileni.metrics:testorg-influx-formatter:2.0.0"
+  implementation "cz.example-company.cileni.influx:testorg-influx-sender:1.0.1"
+
+  compileOnly "org.apache.spark:spark-core_$scalaVersion:$sparkVersion"
+  compileOnly "org.apache.spark:spark-sql_$scalaVersion:$sparkVersion"
+  compileOnly "org.apache.hadoop:hadoop-common:$hadoopVersion"
+
+  testImplementation "org.scalatest:scalatest_$scalaVersion:3.2.18"
+  testImplementation "org.scalamock:scalamock_$scalaVersion:5.2.0"
+  testImplementation "org.scalatestplus:junit-4-13_$scalaVersion:3.2.18.0"
+  testImplementation "org.apache.spark:spark-core_$scalaVersion:$sparkVersion:tests"
+  testImplementation "org.apache.spark:spark-catalyst_$scalaVersion:$sparkVersion:tests"
+  testImplementation "org.apache.spark:spark-sql_$scalaVersion:$sparkVersion"
+  testImplementation "org.apache.spark:spark-sql_$scalaVersion:$sparkVersion:tests"
+  testImplementation 'com.github.mrpowers:spark-fast-tests_2.12:1.3.0'
+  testImplementation "com.couchbase.mock:CouchbaseMock:1.5.27"
+}
+
+tasks.register('sourceJar', Jar) {
+  from sourceSets.main.allScala
+}
+
+idea {
+  module {
+    downloadJavadoc = true
+    downloadSources = true
+  }
+}
+
+shadowJar {
+  zip64 = true
+  archiveFileName = rootProject.name + '-all.jar'
+}
+
+jar {
+  archiveFileName = rootProject.name + '.jar'
+  manifest {
+    attributes("Main-Class": "${mainClassName}")
+    attributes(
+            "Specification-Title": "${rootProject.name}",
+            "Implementation-Title": "${rootProject.group}:${rootProject.name}:${project.version}",
+            "Implementation-Version": "${project.version}",
+            "Implementation-Vendor": "example-company.cz"
+    )
+  }
+}
+
+test {
+  // spark java 17 compatibility args
+  jvmArgs = [
+          "--add-opens=java.base/java.lang=ALL-UNNAMED",
+          "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
+          "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+          "--add-opens=java.base/java.io=ALL-UNNAMED",
+          "--add-opens=java.base/java.net=ALL-UNNAMED",
+          "--add-opens=java.base/java.nio=ALL-UNNAMED",
+          "--add-opens=java.base/java.util=ALL-UNNAMED",
+          "--add-opens=java.base/java.util.concurrent=ALL-UNNAMED",
+          "--add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED",
+          "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
+          "--add-opens=java.base/sun.nio.cs=ALL-UNNAMED",
+          "--add-opens=java.base/sun.security.action=ALL-UNNAMED",
+          "--add-opens=java.base/sun.util.calendar=ALL-UNNAMED",
+          "--add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED",
+  ]
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+      artifact sourceJar {
+        classifier "sources"
+      }
+    }
+  }
+  repositories {
+    maven {
+      url "https://maven.internal.example.com/content/repositories/${project.version.endsWith('-SNAPSHOT') ? 'snapshots' : 'releases'}-local"
+      if (project.hasProperty('mavenDevUser') && project.hasProperty('mavenDevPassword')) {
+        println("Using maven user [$mavenDevUser] for publishing")
+        credentials {
+          username mavenDevUser
+          password mavenDevPassword
+        }
+      }
+    }
+  }
+}

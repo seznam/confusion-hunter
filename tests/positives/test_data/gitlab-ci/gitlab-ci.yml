@@ -1,0 +1,25 @@
+# ruleid: ci-missing-index
+install:
+  script:
+    # ruleid: ci-missing-index
+    - pip install unclaimed-package-v
+
+
+# ruleid: ci-extra-index
+install:
+  script:
+    # ruleid: ci-extra-index
+    - pip install --extra-index-url https://pypi.org/simple unclaimed-package-v
+
+
+# ok: ci-correct
+install:
+  script:
+    # ok: ci-correct
+    - pip install --index-url https://pypi.repo.ops.example.com/simple unclaimed-package-v
+
+
+
+install:
+  script:
+    - npm install unclaimed-package-v @testorg/unclaimed-package-n1

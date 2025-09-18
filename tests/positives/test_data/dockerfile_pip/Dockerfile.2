@@ -1,0 +1,68 @@
+FROM docker.ops.example.com/project/base-jupyter-lab:latest
+
+ENV CONTAINER_VERSION=1
+
+COPY . /tmp/project-feature-engineering
+WORKDIR /tmp/project-feature-engineering
+
+ARG SETUPTOOLS_USE_DISTUTILS=stdlib
+
+# retrieve secrets from service
+ARG SERVICE_AUTH_TOKEN
+RUN apt-get update && apt-get -y install unclaimed-org-service-utils \
+    && mv certs_prod_a.conf /www/service/conf/conf.d/ \
+    && mv certs_prod_b.conf /www/service/conf/conf.d/
+RUN ["/bin/bash", "-c", "/bin/python3 /www/service/bin/dump-secrets 2>&1"]
+RUN /tmp/project-feature-engineering/fetch_certs.sh \
+    && cd /tmp/project-feature-engineering \
+    && apt-get -y remove --auto-remove unclaimed-org-service-utils \
+    && rm -rf /www/service
+
+RUN ["/bin/bash", "-c", "conda update conda"]
+
+# RUN ["/bin/python", "-m", "pip", "install", "obscure-package-test"]
+
+# these have to be installed before everything else, otherwise install crashes, don't ask me why
+# install whichever you need this time
+RUN pip install unclaimed-package-q
+RUN pip install unclaimed-package-r
+# RUN pip install unclaimed-package-s
+# RUN pip install unclaimed-package-t
+
+RUN     apt-get update \
+    &&  pip install -U \
+          pip \
+          setuptools \
+    &&  xargs -r -a debian-requirements.build.txt apt-get -y install \
+    &&  pip install unclaimed-package-u \
+    &&  pip install -r requirements.txt \
+    &&  xargs -r -a debian-requirements.build.txt apt-get -y remove --auto-remove \
+    &&  xargs -r -a debian-requirements.runtime.txt apt-get -y install \
+    &&  rm -rf /tmp/project-feature-engineering
+WORKDIR /root/project
+
+ENV HADOOP_USER_NAME=projectuser
+ENV HADOOP_CONF_DIR=$PROJECT_HADOOP_CONF_DIR
+
+ARG BUILD_DATE=unknown-date
+ARG VCS_REF=unknown-rev
+ARG VERSION=unknown-version
+ARG BUILD_TYPE=manual
+ARG BUILD_HOSTNAME
+ARG BUILD_JOB_NAME
+ARG BUILD_NUMBER
+
+LABEL maintainer="team@example-company.com" \
+      org.label-schema.schema-version="1.0.0" \
+      org.label-schema.vendor="example-company.com" \
+      org.label-schema.description="Docker for project feature engineering" \
+      org.label-schema.usage="https://gitlab.example-company.com/team/project/feature-engineering" \
+      org.label-schema.version="$VERSION" \
+      org.label-schema.build-date="$BUILD_DATE" \
+      org.label-schema.build-type="$BUILD_TYPE" \
+      org.label-schema.build-ci-job-name="$BUILD_JOB_NAME" \
+      org.label-schema.build-ci-build-id="$BUILD_NUMBER" \
+      org.label-schema.build-ci-host-name="$BUILD_HOSTNAME" \
+      org.label-schema.url="https://gitlab.example-company.com/team/project/feature-engineering" \
+      org.label-schema.vcs-url="https://gitlab.example-company.com/team/project/feature-engineering" \
+      org.label-schema.vcs-ref="$VCS_REF"

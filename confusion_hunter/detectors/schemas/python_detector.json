@@ -1,0 +1,55 @@
+{
+    "language": "python",
+    "file_types": {
+        "requirements": {
+            "allow": [
+                "^[-a-zA-Z0-9_.]*requirements[-a-zA-Z0-9_.]*.txt$"
+            ],
+            "deny": [
+                "^[-a-zA-Z0-9_.]*debian-requirements[-a-zA-Z0-9_.]*.txt$"
+            ]
+        },
+        "pipfile": {
+            "allow": [
+                "^[-a-zA-Z0-9_.]*Pipfile[-a-zA-Z0-9_.]*$"
+            ],
+            "deny": []
+        },
+        "pyproject": {
+            "allow": [
+                "^[-a-zA-Z0-9_.]*pyproject[-a-zA-Z0-9_.]*.toml$"
+            ],
+            "deny": []
+        },
+        "uvlock": {
+            "allow": [
+                "uv.lock"
+            ],
+            "deny": []
+        },
+        "poetrylock": {
+            "allow": [
+                "poetry.lock"
+            ],
+            "deny": []
+        },
+        "dockerfile": {
+            "allow": [
+                "^[-a-zA-Z0-9_.]*Dockerfile[-a-zA-Z0-9_.]*$"
+            ],
+            "deny": []
+        },
+        "script": {
+            "allow": [
+                "^[-a-zA-Z0-9_.]+\\.sh$"
+            ],
+            "deny": []
+        },
+        "gitlab-ci": {
+            "allow": [
+                "^gitlab-ci.yml$"
+            ],
+            "deny": []
+        }
+    }
+}

@@ -1,0 +1,99 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "checkpointer"
+authors = [
+  {name = "0xevolve", email = "matthias@pragma.build"}
+]
+requires-python = ">=3.11,<3.13"
+description = "Checkpoints service for Pragma."
+readme = "README.md"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+dependencies = [
+  "pragma-sdk",
+  "pragma-utils",
+  "click>=8.0.1",
+  "pydantic>=2.10.0",
+  "python-dotenv>=1.0.0",
+]
+
+dynamic = ["version"]
+
+[tool.hatch.version]
+path = "checkpointer/__init__.py"
+
+[project.urls]
+homepage = "https://pragma.build"
+repository = "https://github.com/Astraly-Labs/pragma-sdk"
+documentation = "https://docs.pragma.build"
+
+[project.scripts]
+checkpointer = 'checkpointer.main:cli_entrypoint'
+
+[tool.uv.sources]
+pragma_sdk = { path = "../pragma-sdk" }
+pragma_utils = { path = "../pragma-utils" }
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[dependency-groups]
+dev = [
+  "poethepoet >=0.21.1",
+  "ruff >=0.4",
+  "mypy >=1.10",
+  "coverage >=7.2.1",
+  "pytest >=7.2.2",
+  "pytest-asyncio >=0.21.1",
+  "pytest-mock >=3.6.1",
+  "pytest-xdist >=3.2.1",
+  "pytest-cov >=4.0.0",
+  "setuptools >=70.1.0",
+  "pytest-rerunfailures >=12.0",
+]
+
+typing = [
+  "mypy >=1.10",
+  "types-requests >=2.26.0",
+  "types-deprecated >=1.2.9",
+  "types-pyyaml >=6.0.12.20240311",
+]
+
+extra = [
+    { include-group = "dev" },
+    { include-group = "typing" },
+]
+
+[tool.poe.tasks]
+format = "ruff format ."
+format_check = "ruff format . --check"
+lint = "ruff check ."
+typecheck = "mypy ."
+# TODO: The tests loop forever if we run them all, so we only run spot_and_future together.
+# See: https://github.com/astraly-labs/pragma-sdk/issues/153
+test = 'coverage run -m pytest -v tests -s -k "test_checkpointer_spot_and_future"'
+
+[tool.mypy]
+python_version = "3.12"
+namespace_packages = true
+explicit_package_bases = true
+show_error_codes = true
+warn_return_any = true
+ignore_missing_imports = true
+exclude = ["tests"]
+mypy_path = ["../pragma-utils", "../pragma-sdk"]
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+
+
+[tool.coverage.run]
+source = ["checkpointer"]
+
+[tool.coverage.report]
+omit = ["*_test.py", "tests/*"]
+skip_empty = true

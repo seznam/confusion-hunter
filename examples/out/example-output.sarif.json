@@ -1,0 +1,137 @@
+{
+    "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/os/schemas/sarif-schema-2.1.0.json",
+    "version": "2.1.0",
+    "runs": [
+        {
+            "tool": {
+                "driver": {
+                    "name": "Dep-Conf-Scanner",
+                    "fullName": "Dependency Confusion Scanner",
+                    "semanticVersion": "1.0.0",
+                    "informationUri": "http://gsast-domain.com/",
+                    "rules": [
+                        {
+                            "id": "UNCLAIMED_PACKAGE",
+                            "name": "Unclaimed Package",
+                            "shortDescription": {
+                                "text": "Unclaimed Package"
+                            },
+                            "fullDescription": {
+                                "text": "A package was found that is not available on a public registry, making it susceptible to dependency confusion attacks."
+                            },
+                            "help": {
+                                "text": "This package is not registered in the public repository. An attacker could claim this package name and publish a malicious version. Consumers of this package could then unknowingly install the malicious version. To remediate, either register the package name in the public repository or ensure that your package manager is configured to only use private repositories.",
+                                "markdown": "This package is not registered in the public repository. An attacker could claim this package name and publish a malicious version. Consumers of this package could then unknowingly install the malicious version. To remediate, either **register the package name** in the public repository or ensure that your package manager is configured to **only use private repositories**."
+                            },
+                            "properties": {
+                                "tags": [
+                                    "security",
+                                    "supply-chain"
+                                ],
+                                "precision": "high"
+                            }
+                        }
+                    ]
+                }
+            },
+            "results": [
+                {
+                    "ruleId": "UNCLAIMED_PACKAGE",
+                    "level": "warning",
+                    "message": {
+                        "text": "Package 'unclaimed-package-v' is unclaimed and publicly available for anyone to register. Found in python pipfile file."
+                    },
+                    "locations": [
+                        {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                    "uri": "tests/positives/test_data/pipfile/Pipfile"
+                                },
+                                "region": {
+                                    "startLine": 13,
+                                    "endLine": 13,
+                                    "snippet": {
+                                        "text": "unclaimed-package-v = \"*\""
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "properties": {
+                        "language": "python",
+                        "fileType": "pipfile",
+                        "scanType": "python-pipfile",
+                        "packageName": "unclaimed-package-v",
+                        "relativePath": "tests/positives/test_data/pipfile/Pipfile",
+                        "absolutePath": "/confusion-hunter/tests/positives/test_data/pipfile/Pipfile"
+                    },
+                    "relatedLocations": []
+                },
+                {
+                    "ruleId": "UNCLAIMED_PACKAGE",
+                    "level": "warning",
+                    "message": {
+                        "text": "Package 'unclaimed-package-v2' is unclaimed and publicly available for anyone to register. Found in python pipfile file."
+                    },
+                    "locations": [
+                        {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                    "uri": "tests/positives/test_data/pipfile/Pipfile"
+                                },
+                                "region": {
+                                    "startLine": 14,
+                                    "endLine": 14,
+                                    "snippet": {
+                                        "text": "unclaimed-package-v2 = \"1.0.0\""
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "properties": {
+                        "language": "python",
+                        "fileType": "pipfile",
+                        "scanType": "python-pipfile",
+                        "packageName": "unclaimed-package-v2",
+                        "relativePath": "tests/positives/test_data/pipfile/Pipfile",
+                        "absolutePath": "/confusion-hunter/tests/positives/test_data/pipfile/Pipfile"
+                    },
+                    "relatedLocations": []
+                },
+                {
+                    "ruleId": "UNCLAIMED_PACKAGE",
+                    "level": "warning",
+                    "message": {
+                        "text": "Package 'unclaimed-package-v3' is unclaimed and publicly available for anyone to register. Found in python pipfile file."
+                    },
+                    "locations": [
+                        {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                    "uri": "tests/positives/test_data/pipfile/Pipfile"
+                                },
+                                "region": {
+                                    "startLine": 25,
+                                    "endLine": 25,
+                                    "snippet": {
+                                        "text": "unclaimed-package-v3 = \"*\""
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "properties": {
+                        "language": "python",
+                        "fileType": "pipfile",
+                        "scanType": "python-pipfile",
+                        "packageName": "unclaimed-package-v3",
+                        "relativePath": "tests/positives/test_data/pipfile/Pipfile",
+                        "absolutePath": "/confusion-hunter/tests/positives/test_data/pipfile/Pipfile"
+                    },
+                    "relatedLocations": []
+                }
+            ]
+        }
+    ]
+}

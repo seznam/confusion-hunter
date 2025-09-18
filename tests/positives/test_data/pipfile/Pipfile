@@ -1,0 +1,25 @@
+# ruleid: pipfile-ambiguous-source
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[[source]]
+name = "internal"
+url = "https://pypi.repo.ops.example.com/simple"
+verify_ssl = true
+
+[packages]
+unclaimed-package-v = "*"
+unclaimed-package-v2 = "1.0.0"
+
+
+# ok: pipfile-correct-index-used
+[[source]]
+name = "pypi"
+url = "https://pypi.repo.ops.example.com/simple"
+verify_ssl = true
+
+[packages]
+unclaimed-package-v = { version = "*", index = "pypi" }
+unclaimed-package-v3 = "*"
