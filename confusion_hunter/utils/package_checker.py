@@ -15,7 +15,7 @@ from dataclasses import dataclass
 
 PYPI_URL = os.getenv("PYPI_URL", "https://pypi.org/pypi")
 NPM_URL = os.getenv("NPM_URL", "https://registry.npmjs.org")
-NPM_ORG_URL = os.getenv("NPM_ORG_URL", "https://www.npmjs.com/org")
+NPM_ORG_URL = os.getenv("NPM_ORG_URL", "https://www.npmjs.com/~")
 MAVEN_URL = os.getenv("MAVEN_URL", "https://repo1.maven.org/maven2")
 
 
@@ -184,7 +184,7 @@ class PackageChecker:
     
     async def _scope_exists_npm(self, scope: str) -> PackageStatus:
         """Check if an npm scope exists"""
-        return await self._make_request_with_retry(f"{NPM_ORG_URL}/{scope}", "HEAD")
+        return await self._make_request_with_retry(f"{NPM_ORG_URL}{scope}", "HEAD")
     
     async def _individual_package_exists_npm(self, pkg: str) -> PackageStatus:
         """Check if an individual npm package exists"""
@@ -192,9 +192,8 @@ class PackageChecker:
     
     async def _package_exists_npm(self, pkg: str) -> PackageStatus:
         """Check if an npm package exists (handles scoped packages)"""
-        if pkg.startswith("@") and "/" in pkg:
-            scope, _ = pkg.split("/", 1)
-            return await self._scope_exists_npm(scope.lstrip("@"))
+        # For scoped packages, check the package directly via registry API
+        # instead of checking the scope via website (which is blocked by Cloudflare)
         return await self._individual_package_exists_npm(pkg)
     
     async def _package_exists_maven(self, pkg: Dict) -> PackageStatus:
