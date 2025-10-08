@@ -18,6 +18,7 @@ class TestDockerfileNPMScanner(PositiveScannerTest):
             "unclaimed_packages": [
                 {"name": "unclaimed-package-h", "scan_type": "js-npm"},
                 {"name": "unclaimed-package-i", "scan_type": "js-npm"},
-                {"name": "unclaimed-package-j", "scan_type": "js-npm"}
+                {"name": "unclaimed-package-j", "scan_type": "js-npm"},
+                {"name": "@testorg/unclaimed-package-k", "scan_type": "js-npm"}
             ]
         }

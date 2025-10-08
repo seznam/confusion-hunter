@@ -21,6 +21,8 @@ class TestNPMScanner(PositiveScannerTest):
                 {"name": "unclaimed-package-j1", "scan_type": "js-package-json"},
                 {"name": "unclaimed-package-k1", "scan_type": "js-package-json"},
                 {"name": "unclaimed-package-l1", "scan_type": "js-package-json"},
-                {"name": "unclaimed-package-m1", "scan_type": "js-package-json"}
+                {"name": "unclaimed-package-m1", "scan_type": "js-package-json"},
+                {"name": "@testorg/unclaimed-package-n1", "scan_type": "js-package-json"},
+                {"name": "@testorg/unclaimed-package-o1", "scan_type": "js-package-json"}
             ]
         }

@@ -26,6 +26,7 @@ class TestScriptsScanner(PositiveScannerTest):
                 {"name": "unclaimed-package-w2", "scan_type": "js-npm", "file": "script.sh"},
                 {"name": "unclaimed-package-x2", "scan_type": "js-npm", "file": "script.sh"},
                 {"name": "unclaimed-package-x2", "scan_type": "js-npm", "file": "script.sh"},
-                {"name": "unclaimed-package-y2", "scan_type": "js-npm", "file": "script.sh"}
+                {"name": "unclaimed-package-y2", "scan_type": "js-npm", "file": "script.sh"},
+                {"name": "@testorg/unclaimed-package-z2", "scan_type": "js-npm", "file": "script.sh"}
             ]
         }

@@ -19,6 +19,7 @@ class TestGitlabCiScanner(PositiveScannerTest):
                 {"name": "unclaimed-package-v", "scan_type": "python-pip"},
                 {"name": "unclaimed-package-v", "scan_type": "python-pip"},
                 {"name": "unclaimed-package-v", "scan_type": "python-pip"},
-                {"name": "unclaimed-package-v", "scan_type": "js-npm"}
+                {"name": "unclaimed-package-v", "scan_type": "js-npm"},
+                {"name": "@testorg/unclaimed-package-n1", "scan_type": "js-npm"}
             ]
         }
