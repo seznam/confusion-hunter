@@ -15,8 +15,8 @@ class TestPipfilePythonScanner(PositiveScannerTest):
                 {"file_type": "pipfile", "path": "Pipfile", "type": "python"}
             ],
             "unclaimed_packages": [
-                {"name": "unclaimed-package-v", "scan_type": "python-pipfile", "start_line": 13, "end_line": 13},
-                {"name": "unclaimed-package-v2", "scan_type": "python-pipfile", "start_line": 14, "end_line": 14},
-                {"name": "unclaimed-package-v3", "scan_type": "python-pipfile", "start_line": 25, "end_line": 25}
+                {"name": "unclaimed-package-v", "scan_type": "python-pipfile", "start_line": 13, "end_line": 13, "language": "python"},
+                {"name": "unclaimed-package-v2", "scan_type": "python-pipfile", "start_line": 14, "end_line": 14, "language": "python"},
+                {"name": "unclaimed-package-v3", "scan_type": "python-pipfile", "start_line": 25, "end_line": 25, "language": "python"}
             ]
         }

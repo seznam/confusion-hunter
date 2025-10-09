@@ -9,11 +9,11 @@ from ..models.models import FileFinding, PackageFinding, ScanType
 class PipFreezeExecutor(BaseExecutor):
     """Executor for handling pip freeze input from stdin or direct package lists"""
 
-    supported_languages = ["python"]
+    supported_language = "python"
     supported_file_types = ["pip-freeze", "package-list"]
 
     def should_scan_file(self, file_finding: FileFinding) -> bool:
-        return (file_finding.language in self.supported_languages and 
+        return (file_finding.language == self.supported_language and 
                 file_finding.file_type in self.supported_file_types)
 
     def _parse_pip_freeze_line(self, line: str) -> str:
@@ -80,6 +80,7 @@ class PipFreezeExecutor(BaseExecutor):
                     name=original_pkg,
                     file_path=file_finding.path,
                     scan_type=ScanType.PYTHON_PIP_FREEZE,
+                    language=self.supported_language,
                     severity="warning",
                     message=f"Package '{original_pkg}' is unclaimed in PIP registry and publicly available for anyone to register.",
                     start_line=i + 1,  # Line number for the package

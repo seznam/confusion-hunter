@@ -7,13 +7,13 @@ from ..utils.package_checker import check_packages_async
 
 class NPMInstallExecutor(BaseExecutor):
 
-    supported_languages = ["javascript"]
+    supported_language = "javascript"
     supported_file_types = ["dockerfile", "gitlab-ci", "script"]
 
     npm_parser = NPMParser()
 
     def should_scan_file(self, file_finding: FileFinding) -> bool:
-        return file_finding.language in self.supported_languages and file_finding.file_type in self.supported_file_types
+        return file_finding.language == self.supported_language and file_finding.file_type in self.supported_file_types
 
     async def scan_file_async(self, file_finding: FileFinding) -> List[PackageFinding]:
         content = self._read_file(file_finding)
@@ -31,6 +31,7 @@ class NPMInstallExecutor(BaseExecutor):
                         name=package,
                         file_path=file_finding.path,
                         scan_type=ScanType.JS_NPM,
+                        language=self.supported_language,
                         start_line=install.line_numbers[0],
                         end_line=install.line_numbers[1],
                         code_snippet=install.snippet

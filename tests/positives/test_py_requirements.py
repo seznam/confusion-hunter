@@ -15,12 +15,12 @@ class TestRequirementsPythonScanner(PositiveScannerTest):
                 {"file_type": "requirements", "path": "devrequirements-test.txt", "type": "python"}
             ],
             "unclaimed_packages": [
-                {"name": "unclaimed-package-a", "scan_type": "python-requirements", "start_line": 7, "end_line": 7},
-                {"name": "unclaimed-package-b", "scan_type": "python-requirements", "start_line": 8, "end_line": 8},
-                {"name": "unclaimed-package-c", "scan_type": "python-requirements", "start_line": 9, "end_line": 9},
-                {"name": "unclaimed-package-d", "scan_type": "python-requirements", "start_line": 12, "end_line": 12},
-                {"name": "unclaimed-package-e", "scan_type": "python-requirements", "start_line": 13, "end_line": 13},
-                {"name": "unclaimed-package-f", "scan_type": "python-requirements", "start_line": 14, "end_line": 14},
-                {"name": "unclaimed-package-g", "scan_type": "python-requirements", "start_line": 18, "end_line": 18}
+                {"name": "unclaimed-package-a", "scan_type": "python-requirements", "start_line": 7, "end_line": 7, "language": "python"},
+                {"name": "unclaimed-package-b", "scan_type": "python-requirements", "start_line": 8, "end_line": 8, "language": "python"},
+                {"name": "unclaimed-package-c", "scan_type": "python-requirements", "start_line": 9, "end_line": 9, "language": "python"},
+                {"name": "unclaimed-package-d", "scan_type": "python-requirements", "start_line": 12, "end_line": 12, "language": "python"},
+                {"name": "unclaimed-package-e", "scan_type": "python-requirements", "start_line": 13, "end_line": 13, "language": "python"},
+                {"name": "unclaimed-package-f", "scan_type": "python-requirements", "start_line": 14, "end_line": 14, "language": "python"},
+                {"name": "unclaimed-package-g", "scan_type": "python-requirements", "start_line": 18, "end_line": 18, "language": "python"}
             ]
         }

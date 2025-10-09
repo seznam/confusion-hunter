@@ -9,7 +9,7 @@ from .package_parsers.buildgradle_parser import BuildGradleParser
 class BuildGradleExecutor(BaseExecutor):
     """Executor for checking Gradle build.gradle files"""
     
-    supported_languages = ["java"]
+    supported_language = "java"
     supported_file_types = ["buildgradle"]
     
     def __init__(self, project_root):
@@ -17,7 +17,7 @@ class BuildGradleExecutor(BaseExecutor):
 
     def should_scan_file(self, file_finding: FileFinding) -> bool:
         """Check if this is a Gradle build file"""
-        return (file_finding.language in self.supported_languages and 
+        return (file_finding.language == self.supported_language and 
                 file_finding.file_type in self.supported_file_types)
 
     async def scan_file_async(self, file_finding: FileFinding) -> List[PackageFinding]:
@@ -121,6 +121,7 @@ class BuildGradleExecutor(BaseExecutor):
                         name=f"{group_id}:{raw_artifact_id}",  # Use raw artifact ID for reporting
                         file_path=file_finding.path,
                         scan_type=ScanType.GRADLE_BUILDGRADLE,
+                        language=self.supported_language,
                         start_line=start_line,
                         end_line=end_line,
                         code_snippet=code_snippet,

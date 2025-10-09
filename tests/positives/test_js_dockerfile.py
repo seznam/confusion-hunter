@@ -16,8 +16,9 @@ class TestDockerfileNPMScanner(PositiveScannerTest):
                 {"file_type": "dockerfile", "path": "Dockerfile", "type": "javascript"},
             ],
             "unclaimed_packages": [
-                {"name": "unclaimed-package-h", "scan_type": "js-npm"},
-                {"name": "unclaimed-package-i", "scan_type": "js-npm"},
-                {"name": "unclaimed-package-j", "scan_type": "js-npm"}
+                {"name": "unclaimed-package-h", "scan_type": "js-npm", "language": "javascript"},
+                {"name": "unclaimed-package-i", "scan_type": "js-npm", "language": "javascript"},
+                {"name": "unclaimed-package-j", "scan_type": "js-npm", "language": "javascript"},
+                {"name": "@testorg/unclaimed-package-k", "scan_type": "js-npm", "language": "javascript"}
             ]
         }

@@ -7,11 +7,11 @@ from ..models.models import FileFinding, PackageFinding, ScanType
 class NPMPackageListExecutor(BaseExecutor):
     """Executor for handling npm package lists"""
 
-    supported_languages = ["javascript"]
+    supported_language = "javascript"
     supported_file_types = ["package-list"]
 
     def should_scan_file(self, file_finding: FileFinding) -> bool:
-        return (file_finding.language in self.supported_languages and 
+        return (file_finding.language == self.supported_language and 
                 file_finding.file_type in self.supported_file_types)
 
     def _read_package_list(self, file_finding: FileFinding) -> List[str]:
@@ -37,6 +37,7 @@ class NPMPackageListExecutor(BaseExecutor):
                     name=package,
                     file_path=file_finding.path,
                     scan_type=ScanType.JS_PACKAGE_LIST,
+                    language=self.supported_language,
                     severity="warning",
                     message=f"Package '{package}' is unclaimed in NPM registry and publicly available for anyone to register.",
                     start_line=i + 1,
