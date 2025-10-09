@@ -32,6 +32,7 @@ class PackageFinding:
     name: str
     file_path: str
     scan_type: ScanType
+    language: str  # Language determined by the executor (e.g., "python", "javascript", "java")
     severity: str = "warning"
     stage: str = "stage only"
     message: str = "Package is unclaimed and publicly available for anyone to register."
@@ -93,6 +94,7 @@ class ScanResult:
                     "name": p.name,
                     "file": p.file_path,
                     "scan_type": p.scan_type.value,
+                    "language": p.language,
                     "severity": p.severity,
                     "stage": p.stage,
                     "message": p.message,
@@ -166,12 +168,11 @@ class ScanResult:
         absolute_path = os.path.abspath(package.file_path)
         
         # Get file metadata
-        language = file_finding.language if file_finding else "unknown"
         file_type = file_finding.file_type if file_finding else "unknown"
         
         # Create enhanced message with file context
         base_message = f"Package '{package.name}' is unclaimed and publicly available for anyone to register."
-        enhanced_message = f"{base_message} Found in {language} {file_type} file."
+        enhanced_message = f"{base_message} Found in {package.language} {file_type} file."
         
         return {
             "ruleId": package.report_type,
@@ -196,7 +197,7 @@ class ScanResult:
                 }
             ],
             "properties": {
-                "language": language,
+                "language": package.language,
                 "fileType": file_type,
                 "scanType": package.scan_type.value,
                 "packageName": package.name,

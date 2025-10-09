@@ -9,7 +9,7 @@ from ..utils.package_checker import check_packages_async
 class PackageJsonExecutor(BaseExecutor):
     """Executor for checking JavaScript package.json files and their scopes"""
     
-    supported_languages = ["javascript"]
+    supported_language = "javascript"
     supported_file_types = ["package_json"]
     
     def __init__(self, project_root):
@@ -17,7 +17,7 @@ class PackageJsonExecutor(BaseExecutor):
 
     def should_scan_file(self, file_finding: FileFinding) -> bool:
         """Check if this is a JavaScript package.json file"""
-        return (file_finding.language in self.supported_languages and 
+        return (file_finding.language == self.supported_language and 
                 file_finding.file_type in self.supported_file_types)
 
     def _parse_package_json(self, file_path: str) -> Dict:
@@ -165,6 +165,7 @@ class PackageJsonExecutor(BaseExecutor):
                     name=package_name,
                     file_path=file_finding.path,
                     scan_type=ScanType.JS_PACKAGE_JSON,
+                    language=self.supported_language,
                     start_line=1,
                     end_line=1,
                     code_snippet=f"Package '{package_name}' is unclaimed and publicly available for anyone to register."

@@ -9,7 +9,7 @@ from .package_parsers.pipfile_parser import PipfileParser
 class PipfileExecutor(BaseExecutor):
     """Executor for checking Python Pipfile files"""
     
-    supported_languages = ["python"]
+    supported_language = "python"
     supported_file_types = ["pipfile"]
     
     def __init__(self, project_root):
@@ -17,7 +17,7 @@ class PipfileExecutor(BaseExecutor):
 
     def should_scan_file(self, file_finding: FileFinding) -> bool:
         """Check if this is a Python Pipfile"""
-        return (file_finding.language in self.supported_languages and 
+        return (file_finding.language == self.supported_language and 
                 file_finding.file_type in self.supported_file_types)
 
     async def scan_file_async(self, file_finding: FileFinding) -> List[PackageFinding]:
@@ -67,6 +67,7 @@ class PipfileExecutor(BaseExecutor):
                         name=package,
                         file_path=file_finding.path,
                         scan_type=ScanType.PYTHON_PIPFILE,
+                        language=self.supported_language,
                         start_line=line_number,
                         end_line=line_number,
                         code_snippet=code_snippet or f"Package '{package}' is unclaimed and publicly available for anyone to register."

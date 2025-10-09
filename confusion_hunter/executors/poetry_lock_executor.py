@@ -8,7 +8,7 @@ from .package_parsers import PoetryParser
 class PoetryLockExecutor(BaseExecutor):
     """Executor for checking Python poetry.lock files"""
     
-    supported_languages = ["python"]
+    supported_language = "python"
     supported_file_types = ["poetrylock"]
     
     def __init__(self, project_root):
@@ -16,7 +16,7 @@ class PoetryLockExecutor(BaseExecutor):
 
     def should_scan_file(self, file_finding: FileFinding) -> bool:
         """Check if this is a Python poetry.lock file"""
-        return (file_finding.language in self.supported_languages and 
+        return (file_finding.language == self.supported_language and 
                 file_finding.file_type in self.supported_file_types)
 
     async def scan_file_async(self, file_finding: FileFinding) -> List[PackageFinding]:
@@ -55,6 +55,7 @@ class PoetryLockExecutor(BaseExecutor):
                     name=package,
                     file_path=file_finding.path,
                     scan_type=ScanType.PYTHON_POETRYLOCK,
+                    language=self.supported_language,
                     start_line=line_number,
                     end_line=line_number,
                     code_snippet=f"Package '{package}' is unclaimed and publicly available for anyone to register."

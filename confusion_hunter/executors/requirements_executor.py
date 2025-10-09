@@ -9,7 +9,7 @@ from .package_parsers.base import DetectedCommand
 class RequirementsExecutor(BaseExecutor):
     """Executor for checking Python requirements.txt files"""
     
-    supported_languages = ["python"]
+    supported_language = "python"
     supported_file_types = ["requirements"]
     
     def __init__(self, project_root):
@@ -17,7 +17,7 @@ class RequirementsExecutor(BaseExecutor):
 
     def should_scan_file(self, file_finding: FileFinding) -> bool:
         """Check if this is a Python requirements.txt file"""
-        return (file_finding.language in self.supported_languages and 
+        return (file_finding.language == self.supported_language and 
                 file_finding.file_type in self.supported_file_types)
 
     def _parse_requirements_file(self, content: str) -> List[DetectedCommand]:
@@ -160,6 +160,7 @@ class RequirementsExecutor(BaseExecutor):
                         name=package_name,
                         file_path=file_finding.path,
                         scan_type=ScanType.PYTHON_REQUIREMENTS,
+                        language="python",
                         start_line=package.line_numbers[0],
                         end_line=package.line_numbers[1],
                         code_snippet=package.snippet
