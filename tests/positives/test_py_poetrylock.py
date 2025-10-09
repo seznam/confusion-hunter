@@ -15,10 +15,10 @@ class TestPoetryLockScanner(PositiveScannerTest):
                 {"file_type": "poetrylock", "path": "poetry.lock", "type": "python"}
             ],
             "unclaimed_packages": [
-                {"name": "unclaimed-org-urllib3-client", "scan_type": "python-poetrylock"},
-                {"name": "unclaimed-org-testtest", "scan_type": "python-poetrylock"},
-                {"name": "unclaimed-org-python-metaserver-gendoc", "scan_type": "python-poetrylock"},
-                {"name": "unclaimed-org-gridlogger", "scan_type": "python-poetrylock"},
-                {"name": "unclaimed-org-imp-tornado", "scan_type": "python-poetrylock"}
+                {"name": "unclaimed-org-urllib3-client", "scan_type": "python-poetrylock", "language": "python"},
+                {"name": "unclaimed-org-testtest", "scan_type": "python-poetrylock", "language": "python"},
+                {"name": "unclaimed-org-python-metaserver-gendoc", "scan_type": "python-poetrylock", "language": "python"},
+                {"name": "unclaimed-org-gridlogger", "scan_type": "python-poetrylock", "language": "python"},
+                {"name": "unclaimed-org-imp-tornado", "scan_type": "python-poetrylock", "language": "python"}
             ]
         }

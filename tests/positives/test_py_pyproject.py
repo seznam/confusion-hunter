@@ -15,6 +15,6 @@ class TestPyprojectScanner(PositiveScannerTest):
                 {"file_type": "pyproject", "path": "pyproject.toml", "type": "python"}
             ],
             "unclaimed_packages": [
-                {"name": "unclaimed-package-z", "scan_type": "python-pyproject"}
+                {"name": "unclaimed-package-z", "scan_type": "python-pyproject", "language": "python"}
             ]
         }

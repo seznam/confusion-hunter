@@ -16,13 +16,13 @@ class TestNPMScanner(PositiveScannerTest):
                 {"file_type": "package_json", "path": "package.json", "type": "javascript"}
             ],
             "unclaimed_packages": [
-                {"name": "unclaimed-package-h1", "scan_type": "js-package-json"},
-                {"name": "unclaimed-package-i1", "scan_type": "js-package-json"},
-                {"name": "unclaimed-package-j1", "scan_type": "js-package-json"},
-                {"name": "unclaimed-package-k1", "scan_type": "js-package-json"},
-                {"name": "unclaimed-package-l1", "scan_type": "js-package-json"},
-                {"name": "unclaimed-package-m1", "scan_type": "js-package-json"},
-                {"name": "@testorg/unclaimed-package-n1", "scan_type": "js-package-json"},
-                {"name": "@testorg/unclaimed-package-o1", "scan_type": "js-package-json"}
+                {"name": "unclaimed-package-h1", "scan_type": "js-package-json", "language": "javascript"},
+                {"name": "unclaimed-package-i1", "scan_type": "js-package-json", "language": "javascript"},
+                {"name": "unclaimed-package-j1", "scan_type": "js-package-json", "language": "javascript"},
+                {"name": "unclaimed-package-k1", "scan_type": "js-package-json", "language": "javascript"},
+                {"name": "unclaimed-package-l1", "scan_type": "js-package-json", "language": "javascript"},
+                {"name": "unclaimed-package-m1", "scan_type": "js-package-json", "language": "javascript"},
+                {"name": "@testorg/unclaimed-package-n1", "scan_type": "js-package-json", "language": "javascript"},
+                {"name": "@testorg/unclaimed-package-o1", "scan_type": "js-package-json", "language": "javascript"}
             ]
         }

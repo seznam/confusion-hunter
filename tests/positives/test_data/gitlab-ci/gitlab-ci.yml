@@ -9,14 +9,14 @@ install:
 install:
   script:
     # ruleid: ci-extra-index
-    - pip install --extra-index-url https://pypi.org/simple unclaimed-package-v
+    - pip install --extra-index-url https://pypi.org/simple unclaimed-package-va
 
 
 # ok: ci-correct
 install:
   script:
     # ok: ci-correct
-    - pip install --index-url https://pypi.repo.ops.example.com/simple unclaimed-package-v
+    - pip install --index-url https://pypi.repo.ops.example.com/simple unclaimed-package-vb
 
 
 
