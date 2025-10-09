@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "confusion-hunter"
-version = "0.1.0"
+version = "0.1.1"
 description = "Lightweight scanner for spotting unclaimed dependencies before attackers do - protects against supply-chain attacks"
 readme = "README.md"
 requires-python = ">=3.10"
