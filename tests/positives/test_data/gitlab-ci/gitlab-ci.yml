@@ -22,4 +22,4 @@ install:
 
 install:
   script:
-    - npm install unclaimed-package-v @testorg/unclaimed-package-n1
+    - npm install unclaimed-package-vc @testorg/unclaimed-package-n1
